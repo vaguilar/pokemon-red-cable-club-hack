@@ -1,32 +1,34 @@
-Arduino-Spoofing-Gameboy-Pokemon-Trades
-=======================================
+Pokemon Red Cable Club Hack
+===========================
 
-A first gen Pokemon (Yellow, Blue, Red) trade spoofer that allows him to obtain pokemon without having two Game Boys only with Arduino
+[https://www.youtube.com/watch?v=m3e_SyhE3xc](https://www.youtube.com/watch?v=m3e_SyhE3xc)
 
-Pinout
---------------------------------------
-Old "8bit" Plug:
-```
- ___________
-|  6  4  2  |
- \_5__3__1_/   (at cable)
- ```
- 
-| Pin        | Name           | Cable  |
-| ------------- |:-------------:| -----:|
-| 1      | VDD35 | N/A |
-| 2      | SO      |   Red |
-| 3 | SI      |    Orange |
-| 4      | SD | Brown |
-| 5      | SC      |   Green |
-| 6 | GND      |    Blue |
+This is a proof of concept to demonstrate a buffer overflow in the Cable Club. This project contains the assembly and binary data that is sent to the Gameboy along with two ways to send it.
 
+## Arduino
+Cut open a link cable open and wire it to the Arduino like so:
 
-References
---------------------------------------
-- [Pokémon data structure in Generation I](http://bulbapedia.bulbagarden.net/wiki/Pok%C3%A9mon_data_structure_in_Generation_I)
-- [Gameboy Spoof](https://bitbucket.org/adanscotney/gameboy-spoof/src/5f62f48b65c56db4bb6e19e7e532f4ef55b3ccce/)
-- [Gameboy Arduino](https://github.com/tomvdb/gameboy-arduino)
-- [Gameboy Link Cable](http://www.hardwarebook.info/Game_Boy_Link)
+     ___________
+    |  6  4  2  |
+     \_5__3__1_/   (at cable)
 
-Original idea: [Adan Scotney](http://www.adanscotney.com/2014/01/spoofing-pokemon-trades-with-stellaris.html)
+    Cable Pin   Name           Arduino Pin
+       1        VCC                N/A
+       2        Serial Out         6
+       3        Serial In          3
+       4        Serial Data        N/A
+       5        Serial Clock       2
+       6        GND                GND
+
+Upload the program inside the arduino folder and run Pokemon red. Visit the Cable Club and proceed to the Trade Center where the program will execute.
+
+## BGB Emulator Link
+Start the emulator with Pokemon Red. Right click on the emulator window and select Link > Listen. Then run the python script, with an optional port to connect to (default is 8765).
+
+./bgb_link.py [port]
+
+## Building Your Own Program
+* Copy a directory like the hello project in the asm folder
+* Edit the build and linkfile to match the name of your project (change "hello" to whatever you are naming your files)
+* Then go to the py directory, edit the cable_club.py to open your bin file instead.
+* If running on the Arduino, run cable\_club.py (python cable\_club.py) and copy the new DATA_BLOCK array line (replacing the old one) to the pokemonspoof.h file in the arduino folder. Upload to the Arduino and run.

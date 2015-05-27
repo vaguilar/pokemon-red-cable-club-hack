@@ -1,0 +1,13 @@
+#!/bin/bash
+
+if [ -z "$1" ]
+then
+	name="hello"
+else
+	name=$1
+fi
+
+wla-gb -ox $name.asm $name.o &&
+wlalink -dvs linkfile $name.gb &&
+dd if=$name.gb of=$name.bin bs=1 skip=0xc5d6 count=196 &&
+hexdump $name.bin

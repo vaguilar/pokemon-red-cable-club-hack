@@ -11,10 +11,8 @@
 #include "pokemon.h"
 #include "pokemonspoof.h"
 
-
-
 int volatile CLOCK_PIN = 2;
-int volatile SO_PIN = 4;
+int volatile SO_PIN = 6;
 int volatile SI_PIN = 3;
 int volatile data = 0;
 int volatile val = 0;
@@ -39,7 +37,6 @@ void setup() {
   digitalWrite(SO_PIN, LOW);
   pinMode(CLOCK_PIN, INPUT);
   digitalWrite(CLOCK_PIN, HIGH);
-  Serial.begin(9600);
   attachInterrupt( 0, clockInterrupt, RISING );
   
 }
@@ -128,7 +125,7 @@ byte handleIncomingByte(byte in) {
 			trade_centre_state = SENDING_DATA;
 		} else if(trade_centre_state == SENDING_DATA) {
 			send = DATA_BLOCK[counter++];
-			if(counter == 415) {
+			if(counter == 619) {
 				trade_centre_state = DATA_SENT;
 			}
 		} else {
@@ -150,7 +147,4 @@ byte handleIncomingByte(byte in) {
 
 void loop() { 
 
- }
-
-
-
+}
