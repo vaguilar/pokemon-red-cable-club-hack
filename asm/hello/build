@@ -7,7 +7,7 @@ else
 	name=$1
 fi
 
-wla-gb -ox $name.asm $name.o &&
-wlalink -dvs linkfile $name.gb &&
-dd if=$name.gb of=$name.bin bs=1 skip=0xc5d6 count=196 &&
+wla-gb -x -o $name.o $name.asm &&
+wlalink -d -v -s linkfile $name.gb &&
+dd if=$name.gb of=$name.bin bs=1 skip=50646 count=196 &&
 hexdump $name.bin
