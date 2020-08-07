@@ -1,14 +1,27 @@
+#!/usr/bin/env python3
+
 import bgb_link
+from io import BufferedReader
+from typing import List
+hs: int
+ack: int
+menu: int
+trade: int
+colosseum: int
+cancel: int
+preamble: int
+trade_data: int
+done: int
 
 # load program to run
-fp = open("./asm/hello/hello.bin", "rb")
-program_str = fp.read()
+fp: BufferedReader = open("./asm/hello/hello.bin", "rb")
+program_str: bytes = fp.read()
 fp.close()
-program = list(program_str)
+program: List[int] = list(program_str)
 
 hs, ack, menu, trade, colosseum, cancel, preamble, trade_data, done = list(
     range(9))
-state = hs
+state: int = hs
 counter = 0
 
 data = []
@@ -28,11 +41,11 @@ data += party
 data += [253, 253, 253, 253, 253]
 
 # patchlist (196 bytes total)
-patchlist = [255, 255] + program + ([0] * 200)
-patchlist = patchlist[:196]
+patchlist: List[int] = [255, 255] + program + ([0] * 200)
+patchlist: List[int] = patchlist[:196]
 data += patchlist
 
-party_and_patchlist = ", ".join(
+party_and_patchlist: str = ", ".join(
     map(str, party + [253, 253, 253, 253, 253] + patchlist))
 print("pokemonspoof.h contents...")
 print("unsigned char DATA_BLOCK[619] = {" + party_and_patchlist + "};")

@@ -2,30 +2,30 @@ import socket
 import sys
 
 
-def format_data(string):
+def format_data(string) -> int:
     result = 0
     for c in string:
-        result = (result << 8) | ord(c)
+        result = (result << 8) | c
     return result
 
 
-def send_data(sock, b1, b2, b3, b4, time):
-    data = [0] * 8
+def send_data(sock, b1: int, b2: int, b3: int, b4: int, time) -> None:
+    data = bytearray()
 
-    data[0] = chr(b1)
-    data[1] = chr(b2)
-    data[2] = chr(b3)
-    data[3] = chr(b4)
+    data.append(b1)
+    data.append(b2)
+    data.append(b3)
+    data.append(b4)
 
-    data[4] = chr((time >> 24) & 0xff)
-    data[5] = chr((time >> 16) & 0xff)
-    data[6] = chr((time >> 8) & 0xff)
-    data[7] = chr(time & 0xff)
+    data.append((time >> 24) & 0xff)
+    data.append((time >> 16) & 0xff)
+    data.append((time >> 8) & 0xff)
+    data.append(time & 0xff)
 
-    sock.send(''.join(data))
+    sock.send(data)
 
 
-def connect(port, callback):
+def connect(port, callback) -> None:
     sock = socket.socket()
     sock.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY,
                     1)  # requires nodelay
@@ -51,8 +51,8 @@ def connect(port, callback):
             if cmd == 1:
                 # handshake (version)
                 pass
-                #send_data(sock, 0x01, 0x01, 0x04, 0x00, time)
-                #send_data(sock, b1, b2, b3, b4, time)
+                # send_data(sock, 0x01, 0x01, 0x04, 0x00, time)
+                # send_data(sock, b1, b2, b3, b4, time)
 
             elif cmd == 101:
                 # sync gamepad
@@ -73,9 +73,8 @@ def connect(port, callback):
 
             elif cmd == 108:
                 send_data(sock, 108, 1, 0, 0, 0)
-    except:
-        print(sys.exc_info()[0])
+    except Exception as e:
         sock.close()
-        pass
+        raise e
 
     print("Connection closed.")
